@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Maker Stage 3: Code, Theme & Deploy Workshop</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        h1, h2, h3 {
+            color: #38bdf8;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 15px;
+        }
+        .badge-box {
+            background: #0284c7;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #475569;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #334155;
+            color: #38bdf8;
+        }
+        code {
+            background: #0f172a;
+            color: #f43f5e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid #475569;
+        }
+        .step-card {
+            background: #334155;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #38bdf8;
+        }
+        .demo-links {
+            background: #1e1b4b;
+            border: 2px dashed #6366f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            background: #4f46e5;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #4338ca;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Digital Maker Stage 3 Workshop</h1>
+    <div style="text-align: center;">
+        <span class="badge-box">Badge Challenge: Build, Theme & Deploy a Game</span>
+    </div>
+
+    <p>Welcome, Creators! In this 45-minute mission, you will take a real web game template, theme it to your favorite style, customize the code, and publish it live on GitHub Pages so anyone can play it on a computer or phone!</p>
+
+    <!-- LIVE DEMOS -->
+    <div class="demo-links">
+        <h3>🎮 Live Game Demos</h3>
+        <p>Try out the base games before you fork and hack your own:</p>
+        <a href="#" class="btn" target="_blank">1. Theme Catcher (Clicker)</a>
+        <a href="#" class="btn" target="_blank">2. Basket Collector</a>
+        <a href="#" class="btn" target="_blank">3. Endless Dodger</a>
+        <p style="font-size: 0.9em; color: #94a3b8; margin-top: 10px;">*(Leaders: Replace `#` above with your live GitHub Pages demo links)*</p>
+    </div>
+
+    <h2>⏱️ The 45-Minute Timeline</h2>
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>Phase</th>
+            <th>What You'll Do</th>
+        </tr>
+        <tr>
+            <td>00 – 05 min</td>
+            <td>Pick & Fork</td>
+            <td>Choose your game style and copy the repository to your GitHub account.</td>
+        </tr>
+        <tr>
+            <td>05 – 10 min</td>
+            <td>Deploy</td>
+            <td>Turn on GitHub Pages to generate your live website link.</td>
+        </tr>
+        <tr>
+            <td>10 – 25 min</td>
+            <td>The Hacker Zone</td>
+            <td>Edit variables, paste image URLs for backgrounds/targets, and test themes.</td>
+        </tr>
+        <tr>
+            <td>25 – 35 min</td>
+            <td>Advanced Hack</td>
+            <td>Add custom features like a <strong>Play Again</strong> restart button!</td>
+        </tr>
+        <tr>
+            <td>35 – 45 min</td>
+            <td>Playtest</td>
+            <td>Share your link with patrol mates and play each other's custom creations.</td>
+        </tr>
+    </table>
+
+    <h2>🛠️ Step-by-Step Guide</h2>
+
+    <div class="step-card">
+        <h3>Step 1: Fork Your Chosen Game</h3>
+        <ol>
+            <li>Log into your <strong>GitHub</strong> account.</li>
+            <li>Navigate to your leader's template repository for the game you want to build.</li>
+            <li>Click the <strong>Fork</strong> button in the top-right corner to save your own copy.</li>
+        </ol>
+    </div>
+
+    <div class="step-card">
+        <h3>Step 2: Publish to GitHub Pages (Go Live!)</h3>
+        <ol>
+            <li>Inside your repository, click the <strong>Settings</strong> tab at the top.</li>
+            <li>On the left sidebar, click <strong>Pages</strong>.</li>
+            <li>Under <strong>Build and deployment</strong>, change the branch from <em>None</em> to <strong>main</strong> (or <strong>master</strong>) and click <strong>Save</strong>.</li>
+            <li>Wait ~60 seconds, refresh the page, and open your new live game link!</li>
+        </ol>
+    </div>
+
+    <div class="step-card">
+        <h3>Step 3: Hack the Code & Add a Theme</h3>
+        <ol>
+            <li>Go back to the <strong>Code</strong> tab and click on <code>index.html</code>, then click the <strong>Pencil icon</strong> to edit.</li>
+            <li>Scroll down to the <strong>🛠️ SCOUT HACKER ZONE</strong> near the top.</li>
+            <li>Change game speed, timer limits, or paste image links into <code>backgroundImageUrl</code> and <code>targetImageUrl</code>.</li>
+            <li>Click green <strong>Commit changes...</strong> to save!</li>
+        </ol>
+    </div>
+
+    <h2>🌟 Advanced Hacker Guide: Adding a "Play Again" Button</h2>
+    <p>Want to let players restart the game without refreshing the page? Follow these steps to add a restart button when the 60-second timer hits zero!</p>
+    
+    <p><strong>1. Add this HTML button</strong> just below your game canvas:</p>
+    <pre>&lt;div style="margin-top: 15px;"&gt;
+    &lt;button id="restartBtn" style="padding: 10px 20px; font-size: 16px; font-weight: bold; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; display: none;"&gt;🔄 Play Again&lt;/button&gt;
+&lt;/div&gt;</pre>
+
+    <p><strong>2. Add this JavaScript function</strong> inside your <code>&lt;script&gt;</code> tag:</p>
+    <pre>const restartBtn = document.getElementById("restartBtn");
+
+function restartGame() {
+    score = 0;
+    timeLeft = gameDuration;
+    gameIsRunning = true;
+    scoreDisplay.innerText = score;
+    timerDisplay.innerText = timeLeft;
+    restartBtn.style.display = "none"; // Hide button while playing
+
+    // Restart your game loops / timers here!
+}
+
+restartBtn.addEventListener("click", restartGame);</pre>
+    <p><em>Tip: When time runs out (`timeLeft &lt;= 0`), make the button pop up by setting `restartBtn.style.display = "inline-block";`!</em></p>
+
+    <h2>🎨 Where to Find Free Theme Images</h2>
+    <p>To make your game look awesome, follow these rules when searching online:</p>
+    <ul>
+        <li><strong>Check the extension:</strong> Image URLs must end in <code>.png</code> or <code>.jpg</code>.</li>
+        <li><strong>Transparent Backgrounds:</strong> For game characters or targets, use <code>.png</code> files with clear backgrounds so they don't look like boring square blocks.</li>
+        <li><strong>Google Images Tip:</strong> Search for an icon (e.g., <em>"airplane icon png"</em>), click <strong>Tools &gt; Color &gt; Transparent</strong> to find clean cutouts.</li>
+        <li><strong>Copy the Right Link:</strong> Right-click the image and select <strong>"Copy image address"</strong> (do not copy the browser tab URL!).</li>
+    </ul>
+
+    <hr style="border: 0; border-top: 1px solid #475569; margin: 30px 0;">
+    <p style="text-align: center; color: #94a3b8; font-size: 0.9em;">Designed for Scouts UK • Digital Maker Stage 3 🚀</p>
+</div>
+
+</body>
+</html>
