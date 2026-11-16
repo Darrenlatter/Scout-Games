@@ -7,6 +7,7 @@
     <style>
         body { text-align: center; background-color: #0f172a; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; touch-action: manipulation; margin: 0; padding: 10px; }
         canvas { background-color: #334155; border: 4px solid #64748b; border-radius: 8px; max-width: 100%; height: auto; margin-top: 10px; }
+        .stats { font-size: 20px; font-weight: bold; margin: 5px; }
         .controls { margin-top: 15px; }
         .btn { background-color: #38bdf8; color: #0f172a; border: none; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 8px; margin: 0 10px; cursor: pointer; }
         .btn:active { background-color: #7dd3fc; }
@@ -14,7 +15,7 @@
 </head>
 <body>
     <h1>Dodge Obstacles!</h1>
-    <h2>Score: <span id="score">0</span></h2>
+    <div class="stats">Time Left: <span id="timer">60</span>s | Score (Dodges): <span id="score">0</span></div>
     <canvas id="gameCanvas" width="600" height="400"></canvas>
     
     <div class="controls">
@@ -23,17 +24,26 @@
     </div>
 
     <script>
-        // 🛠️ HACKER ZONE
-        let gameSpeed = 5;          
+        // =====================================================================
+        // 🛠️ SCOUT HACKER ZONE: WHAT CAN YOU CHANGE?
+        // =====================================================================
+        let gameSpeed = 6;          // ☄️ HAZARD SPEED: How fast obstacles fly at you
+        let gameDuration = 60;      // ⏱️ TIME: Survive for 60 seconds to win!
+        
+        // 🎨 THEME SETTINGS
         let backgroundImageUrl = ""; 
-        let playerImageUrl = "";     
-        let hazardImageUrl = "";     
+        let playerImageUrl = "";     // e.g. Player avatar
+        let hazardImageUrl = "";     // e.g. Incoming obstacle/meteor
+        // =====================================================================
 
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreDisplay = document.getElementById("score");
+        const timerDisplay = document.getElementById("timer");
 
         let score = 0;
+        let timeLeft = gameDuration;
+        let gameIsRunning = true;
         let playerY = 180, playerSize = 40;
         let hazardX = 600, hazardY = Math.random() * 350, hazardSize = 40;
         let upPressed = false, downPressed = false;
@@ -45,7 +55,6 @@
         const playerImg = new Image(); if (playerImageUrl) playerImg.src = playerImageUrl;
         const hazardImg = new Image(); if (hazardImageUrl) hazardImg.src = hazardImageUrl;
 
-        // Keyboard Controls
         document.addEventListener("keydown", (e) => {
             if (e.key === "ArrowUp") upPressed = true;
             if (e.key === "ArrowDown") downPressed = true;
@@ -55,7 +64,6 @@
             if (e.key === "ArrowDown") downPressed = false;
         });
 
-        // Mobile Touch Button Controls
         const upBtn = document.getElementById("upBtn");
         const downBtn = document.getElementById("downBtn");
 
@@ -69,9 +77,20 @@
         downBtn.addEventListener("mousedown", () => downPressed = true);
         downBtn.addEventListener("mouseup", () => downPressed = false);
 
+        let countdown = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                gameIsRunning = false;
+            }
+        }, 1000);
+
         function update() {
-            if (upPressed && playerY > 0) playerY -= 6;
-            if (downPressed && playerY < canvas.height - playerSize) playerY += 6;
+            if (!gameIsRunning) return;
+
+            if (upPressed && playerY > 0) playerY -= 7;
+            if (downPressed && playerY < canvas.height - playerSize) playerY += 7;
 
             hazardX -= gameSpeed;
             if (hazardX < -hazardSize) {
@@ -84,7 +103,7 @@
             let playerX = 50;
             if (playerX < hazardX + hazardSize && playerX + playerSize > hazardX &&
                 playerY < hazardY + hazardSize && playerY + playerSize > hazardY) {
-                score = 0; 
+                score = Math.max(0, score - 2); // Penalty for crashing!
                 scoreDisplay.innerText = score;
                 hazardX = canvas.width;
             }
@@ -92,8 +111,15 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let playerX = 50;
+            
+            if (!gameIsRunning) {
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "30px Arial";
+                ctx.fillText("SURVIVED! Final Score: " + score, canvas.width / 2 - 170, canvas.height / 2);
+                return;
+            }
 
+            let playerX = 50;
             if (playerImageUrl) {
                 ctx.drawImage(playerImg, playerX, playerY, playerSize, playerSize);
             } else {

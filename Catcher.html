@@ -7,25 +7,38 @@
     <style>
         body { text-align: center; background-color: #2b2b2b; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; touch-action: manipulation; margin: 0; padding: 10px; }
         canvas { background-color: #e0e0e0; cursor: crosshair; border: 4px solid #555; border-radius: 8px; max-width: 100%; height: auto; margin-top: 10px; }
+        .stats { font-size: 20px; font-weight: bold; margin: 5px; }
     </style>
 </head>
 <body>
     <h1>Theme Catcher!</h1>
-    <h2>Score: <span id="score">0</span></h2>
+    <div class="stats">Time Left: <span id="timer">60</span>s | Score: <span id="score">0</span></div>
     <canvas id="gameCanvas" width="600" height="400"></canvas>
+    
     <script>
-        // 🛠️ HACKER ZONE
-        let targetSize = 60;
-        let gameSpeed = 1000;
-        let pointsPerClick = 1;
+        // =====================================================================
+        // 🛠️ SCOUT HACKER ZONE: WHAT CAN YOU CHANGE?
+        // =====================================================================
+        let targetSize = 60;       // 📏 SIZE: Try making it 30 (harder) or 100 (easier)
+        let gameSpeed = 800;       // ⚡ SPEED: Lower numbers = faster jumping (e.g., 500)
+        let pointsPerClick = 1;    // 🏆 POINTS: Change to 5 or 10 points per hit
+        let gameDuration = 60;     // ⏱️ TIME: Change game length (e.g., 30 seconds)
+        
+        // 🎨 THEME SETTINGS (Paste direct image links ending in .png, .jpg)
         let backgroundImageUrl = ""; 
         let targetImageUrl = "";     
-        let targetColor = "red";     
+        let targetColor = "red";   // Fallback color if no image is used
+        // =====================================================================
 
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreDisplay = document.getElementById("score");
-        let score = 0, targetX = 100, targetY = 100;
+        const timerDisplay = document.getElementById("timer");
+
+        let score = 0;
+        let timeLeft = gameDuration;
+        let targetX = 100, targetY = 100;
+        let gameIsRunning = true;
 
         if (backgroundImageUrl !== "") {
             canvas.style.backgroundImage = "url('" + backgroundImageUrl + "')";
@@ -37,6 +50,12 @@
 
         function drawTarget() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!gameIsRunning) {
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "30px Arial";
+                ctx.fillText("TIME'S UP! Final Score: " + score, canvas.width / 2 - 160, canvas.height / 2);
+                return;
+            }
             if (targetImageUrl !== "") {
                 ctx.drawImage(targetImg, targetX, targetY, targetSize, targetSize);
             } else {
@@ -44,14 +63,16 @@
                 ctx.fillRect(targetX, targetY, targetSize, targetSize);
             }
         }
+
         function moveTarget() {
+            if (!gameIsRunning) return;
             targetX = Math.random() * (canvas.width - targetSize);
             targetY = Math.random() * (canvas.height - targetSize);
             drawTarget();
         }
 
-        // Handles both mouse clicks and mobile taps
         function handleInteraction(clientX, clientY) {
+            if (!gameIsRunning) return;
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
             const scaleY = canvas.height / rect.height;
@@ -71,7 +92,18 @@
             handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: false });
 
-        setInterval(moveTarget, gameSpeed);
+        let targetInterval = setInterval(moveTarget, gameSpeed);
+        let countdown = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                clearInterval(targetInterval);
+                gameIsRunning = false;
+                drawTarget();
+            }
+        }, 1000);
+
         setTimeout(moveTarget, 50);
     </script>
 </body>
