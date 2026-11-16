@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Dodge Game</title>
+    <style>
+        body { text-align: center; background-color: #0f172a; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; touch-action: manipulation; margin: 0; padding: 10px; }
+        canvas { background-color: #334155; border: 4px solid #64748b; border-radius: 8px; max-width: 100%; height: auto; margin-top: 10px; }
+        .controls { margin-top: 15px; }
+        .btn { background-color: #38bdf8; color: #0f172a; border: none; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 8px; margin: 0 10px; cursor: pointer; }
+        .btn:active { background-color: #7dd3fc; }
+    </style>
+</head>
+<body>
+    <h1>Dodge Obstacles!</h1>
+    <h2>Score: <span id="score">0</span></h2>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    
+    <div class="controls">
+        <button class="btn" id="upBtn">⬆️ UP</button>
+        <button class="btn" id="downBtn">DOWN ⬇️</button>
+    </div>
+
+    <script>
+        // 🛠️ HACKER ZONE
+        let gameSpeed = 5;          
+        let backgroundImageUrl = ""; 
+        let playerImageUrl = "";     
+        let hazardImageUrl = "";     
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreDisplay = document.getElementById("score");
+
+        let score = 0;
+        let playerY = 180, playerSize = 40;
+        let hazardX = 600, hazardY = Math.random() * 350, hazardSize = 40;
+        let upPressed = false, downPressed = false;
+
+        if (backgroundImageUrl !== "") {
+            canvas.style.backgroundImage = "url('" + backgroundImageUrl + "')";
+            canvas.style.backgroundSize = "cover";
+        }
+        const playerImg = new Image(); if (playerImageUrl) playerImg.src = playerImageUrl;
+        const hazardImg = new Image(); if (hazardImageUrl) hazardImg.src = hazardImageUrl;
+
+        // Keyboard Controls
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp") upPressed = true;
+            if (e.key === "ArrowDown") downPressed = true;
+        });
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "ArrowUp") upPressed = false;
+            if (e.key === "ArrowDown") downPressed = false;
+        });
+
+        // Mobile Touch Button Controls
+        const upBtn = document.getElementById("upBtn");
+        const downBtn = document.getElementById("downBtn");
+
+        upBtn.addEventListener("touchstart", (e) => { e.preventDefault(); upPressed = true; });
+        upBtn.addEventListener("touchend", (e) => { e.preventDefault(); upPressed = false; });
+        upBtn.addEventListener("mousedown", () => upPressed = true);
+        upBtn.addEventListener("mouseup", () => upPressed = false);
+
+        downBtn.addEventListener("touchstart", (e) => { e.preventDefault(); downPressed = true; });
+        downBtn.addEventListener("touchend", (e) => { e.preventDefault(); downPressed = false; });
+        downBtn.addEventListener("mousedown", () => downPressed = true);
+        downBtn.addEventListener("mouseup", () => downPressed = false);
+
+        function update() {
+            if (upPressed && playerY > 0) playerY -= 6;
+            if (downPressed && playerY < canvas.height - playerSize) playerY += 6;
+
+            hazardX -= gameSpeed;
+            if (hazardX < -hazardSize) {
+                hazardX = canvas.width;
+                hazardY = Math.random() * (canvas.height - hazardSize);
+                score += 1;
+                scoreDisplay.innerText = score;
+            }
+
+            let playerX = 50;
+            if (playerX < hazardX + hazardSize && playerX + playerSize > hazardX &&
+                playerY < hazardY + hazardSize && playerY + playerSize > hazardY) {
+                score = 0; 
+                scoreDisplay.innerText = score;
+                hazardX = canvas.width;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let playerX = 50;
+
+            if (playerImageUrl) {
+                ctx.drawImage(playerImg, playerX, playerY, playerSize, playerSize);
+            } else {
+                ctx.fillStyle = "#38bdf8"; ctx.fillRect(playerX, playerY, playerSize, playerSize);
+            }
+            if (hazardImageUrl) {
+                ctx.drawImage(hazardImg, hazardX, hazardY, hazardSize, hazardSize);
+            } else {
+                ctx.fillStyle = "#f43f5e"; ctx.fillRect(hazardX, hazardY, hazardSize, hazardSize);
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+</html>

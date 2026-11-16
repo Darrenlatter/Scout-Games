@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Basket Collector</title>
+    <style>
+        body { text-align: center; background-color: #1e272e; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; touch-action: manipulation; margin: 0; padding: 10px; }
+        canvas { background-color: #485460; border: 4px solid #d2dae2; border-radius: 8px; max-width: 100%; height: auto; margin-top: 10px; }
+        .controls { margin-top: 15px; }
+        .btn { background-color: #ff5252; color: white; border: none; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 8px; margin: 0 10px; cursor: pointer; }
+        .btn:active { background-color: #ff7979; }
+    </style>
+</head>
+<body>
+    <h1>Basket Collector!</h1>
+    <h2>Score: <span id="score">0</span></h2>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    
+    <div class="controls">
+        <button class="btn" id="leftBtn">⬅️ LEFT</button>
+        <button class="btn" id="rightBtn">RIGHT ➡️</button>
+    </div>
+
+    <script>
+        // 🛠️ HACKER ZONE
+        let fallSpeed = 3;          
+        let basketSpeed = 8;        
+        let backgroundImageUrl = ""; 
+        let itemImageUrl = "";       
+        let basketImageUrl = "";     
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreDisplay = document.getElementById("score");
+
+        let score = 0;
+        let itemX = Math.random() * 550, itemY = 0, itemSize = 40;
+        let basketX = 250, basketY = 330, basketWidth = 90, basketHeight = 40;
+        let rightPressed = false, leftPressed = false;
+
+        if (backgroundImageUrl !== "") {
+            canvas.style.backgroundImage = "url('" + backgroundImageUrl + "')";
+            canvas.style.backgroundSize = "cover";
+        }
+        const itemImg = new Image(); if (itemImageUrl) itemImg.src = itemImageUrl;
+        const basketImg = new Image(); if (basketImageUrl) basketImg.src = basketImageUrl;
+
+        // Keyboard Controls
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight") rightPressed = true;
+            if (e.key === "ArrowLeft") leftPressed = true;
+        });
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "ArrowRight") rightPressed = false;
+            if (e.key === "ArrowLeft") leftPressed = false;
+        });
+
+        // Mobile Touch Button Controls
+        const leftBtn = document.getElementById("leftBtn");
+        const rightBtn = document.getElementById("rightBtn");
+
+        leftBtn.addEventListener("touchstart", (e) => { e.preventDefault(); leftPressed = true; });
+        leftBtn.addEventListener("touchend", (e) => { e.preventDefault(); leftPressed = false; });
+        leftBtn.addEventListener("mousedown", () => leftPressed = true);
+        leftBtn.addEventListener("mouseup", () => leftPressed = false);
+
+        rightBtn.addEventListener("touchstart", (e) => { e.preventDefault(); rightPressed = true; });
+        rightBtn.addEventListener("touchend", (e) => { e.preventDefault(); rightPressed = false; });
+        rightBtn.addEventListener("mousedown", () => rightPressed = true);
+        rightBtn.addEventListener("mouseup", () => rightPressed = false);
+
+        function update() {
+            if (rightPressed && basketX < canvas.width - basketWidth) basketX += basketSpeed;
+            if (leftPressed && basketX > 0) basketX -= basketSpeed;
+
+            itemY += fallSpeed;
+            if (itemY + itemSize >= basketY && itemX + itemSize >= basketX && itemX <= basketX + basketWidth) {
+                score += 1;
+                scoreDisplay.innerText = score;
+                itemY = 0;
+                itemX = Math.random() * (canvas.width - itemSize);
+            }
+            if (itemY > canvas.height) {
+                itemY = 0;
+                itemX = Math.random() * (canvas.width - itemSize);
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (itemImageUrl) {
+                ctx.drawImage(itemImg, itemX, itemY, itemSize, itemSize);
+            } else {
+                ctx.fillStyle = "#ffdd59"; ctx.fillRect(itemX, itemY, itemSize, itemSize);
+            }
+            if (basketImageUrl) {
+                ctx.drawImage(basketImg, basketX, basketY, basketWidth, basketHeight);
+            } else {
+                ctx.fillStyle = "#ff5252"; ctx.fillRect(basketX, basketY, basketWidth, basketHeight);
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Theme Catcher</title>
+    <style>
+        body { text-align: center; background-color: #2b2b2b; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; touch-action: manipulation; margin: 0; padding: 10px; }
+        canvas { background-color: #e0e0e0; cursor: crosshair; border: 4px solid #555; border-radius: 8px; max-width: 100%; height: auto; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Theme Catcher!</h1>
+    <h2>Score: <span id="score">0</span></h2>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <script>
+        // 🛠️ HACKER ZONE
+        let targetSize = 60;
+        let gameSpeed = 1000;
+        let pointsPerClick = 1;
+        let backgroundImageUrl = ""; 
+        let targetImageUrl = "";     
+        let targetColor = "red";     
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreDisplay = document.getElementById("score");
+        let score = 0, targetX = 100, targetY = 100;
+
+        if (backgroundImageUrl !== "") {
+            canvas.style.backgroundImage = "url('" + backgroundImageUrl + "')";
+            canvas.style.backgroundSize = "cover";
+            canvas.style.backgroundPosition = "center";
+        }
+        const targetImg = new Image();
+        if (targetImageUrl !== "") targetImg.src = targetImageUrl;
+
+        function drawTarget() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (targetImageUrl !== "") {
+                ctx.drawImage(targetImg, targetX, targetY, targetSize, targetSize);
+            } else {
+                ctx.fillStyle = targetColor;
+                ctx.fillRect(targetX, targetY, targetSize, targetSize);
+            }
+        }
+        function moveTarget() {
+            targetX = Math.random() * (canvas.width - targetSize);
+            targetY = Math.random() * (canvas.height - targetSize);
+            drawTarget();
+        }
+
+        // Handles both mouse clicks and mobile taps
+        function handleInteraction(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const clickX = (clientX - rect.left) * scaleX;
+            const clickY = (clientY - rect.top) * scaleY;
+
+            if (clickX >= targetX && clickX <= targetX + targetSize && clickY >= targetY && clickY <= targetY + targetSize) {
+                score += pointsPerClick;
+                scoreDisplay.innerText = score;
+                moveTarget();
+            }
+        }
+
+        canvas.addEventListener("mousedown", (e) => handleInteraction(e.clientX, e.clientY));
+        canvas.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+
+        setInterval(moveTarget, gameSpeed);
+        setTimeout(moveTarget, 50);
+    </script>
+</body>
+</html>
